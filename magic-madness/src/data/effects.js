@@ -114,7 +114,7 @@ var effects = [
   {image: mindslaver, good: false, impactful: true, effect: "Target opponent controls your next turn." },
   {image: rewind, good: false, impactful: true, effect: "Undo the turn, then skip your turn." },
 
-  // Funny Ones (28)
+  // Funny Ones (29)
   {image: chaos_warp, good: false, impactful: true, effect: "Chaos warp one of your permanents." },
   {image: warp_world, good: false, impactful: true, effect: "Warp world. (The card)" },
   {image: effectsimg, good: false, impactful: false, effect: "Compliment an opponent." },
@@ -148,4 +148,4 @@ var effects = [
 
 export default effects;
 
-// Total count: 91
+// Total count: 92
