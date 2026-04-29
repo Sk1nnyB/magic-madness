@@ -197,7 +197,7 @@ const Decks = () => {
                 value={formData.powerLevel}
                 onChange={handleInputChange}
               >
-                {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map(level => (
+                {[11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1].map(level => (
                   <option key={level} value={level}>{level}</option>
                 ))}
               </select>
@@ -212,9 +212,10 @@ const Decks = () => {
                   checked={formData.onlineOnly || false}
                   onChange={(e) => {
                     if (e && e.target) {
+                      const isChecked = e.target.checked;
                       setFormData(prev => ({
                         ...prev,
-                        onlineOnly: e.target.checked
+                        onlineOnly: isChecked
                       }));
                     }
                   }}
@@ -271,7 +272,7 @@ const Decks = () => {
               onChange={handleFilterChange}
             >
               <option value=''>All Power Levels</option>
-              {uniquePowerLevels.map(level => (
+              {[...uniquePowerLevels].sort((a, b) => b - a).map(level => (
                 <option key={level} value={level}>{level}</option>
               ))}
             </select>
