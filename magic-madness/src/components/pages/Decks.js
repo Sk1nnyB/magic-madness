@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { db } from '../../utils/firebase';
-import { collection, addDoc, query, getDocs, doc, deleteDoc } from 'firebase/firestore';
+import { collection, addDoc, query, getDocs, doc, deleteDoc, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
 import { useAuth } from '../../AuthContext';
 import './Decks.css';
 
@@ -100,6 +100,10 @@ const Decks = () => {
         ownerUsername: profile?.username || user.email || 'anonymous',
         ownerNickname: profile?.nickname || profile?.username || user.email || 'anonymous',
         powerLevel: parseInt(formData.powerLevel),
+        upvotedBy: [],
+        downvotedBy: [],
+        upvotes: 0,
+        downvotes: 0,
         timestamp: new Date()
       });
 
@@ -138,6 +142,62 @@ const Decks = () => {
       setError('Unable to delete deck.');
     }
   };
+
+  const userId = user?.uid || user?.email || null;
+  const hasUpvoted = (deck) => userId && Array.isArray(deck.upvotedBy) && deck.upvotedBy.includes(userId);
+  const hasDownvoted = (deck) => userId && Array.isArray(deck.downvotedBy) && deck.downvotedBy.includes(userId);
+  const getUpvoteCount = (deck) => Array.isArray(deck.upvotedBy) ? deck.upvotedBy.length : deck.upvotes || 0;
+  const getDownvoteCount = (deck) => Array.isArray(deck.downvotedBy) ? deck.downvotedBy.length : deck.downvotes || 0;
+
+  const handleVote = async (deck, voteType) => {
+    if (!userId) {
+      setError('You must be signed in to vote.');
+      return;
+    }
+
+    const deckRef = doc(db, 'decks', deck.id);
+    const upvoted = hasUpvoted(deck);
+    const downvoted = hasDownvoted(deck);
+    const canVoteUp = parseInt(deck.powerLevel, 10) !== 11;
+    const canVoteDown = parseInt(deck.powerLevel, 10) !== 1;
+
+    try {
+      const updates = {};
+
+      if (voteType === 'up' && canVoteUp) {
+        if (upvoted) {
+          updates.upvotedBy = arrayRemove(userId);
+        } else {
+          updates.upvotedBy = arrayUnion(userId);
+          if (downvoted) {
+            updates.downvotedBy = arrayRemove(userId);
+          }
+        }
+      }
+
+      if (voteType === 'down' && canVoteDown) {
+        if (downvoted) {
+          updates.downvotedBy = arrayRemove(userId);
+        } else {
+          updates.downvotedBy = arrayUnion(userId);
+          if (upvoted) {
+            updates.upvotedBy = arrayRemove(userId);
+          }
+        }
+      }
+
+      if (Object.keys(updates).length > 0) {
+        await updateDoc(deckRef, updates);
+        fetchDecks();
+      }
+    } catch (error) {
+      console.error('Error updating vote:', error);
+      setError('Unable to update vote.');
+    }
+  };
+
+  const canUpvote = (deck) => parseInt(deck.powerLevel, 10) !== 11;
+  const canDownvote = (deck) => parseInt(deck.powerLevel, 10) !== 1;
 
   // Filter decks based on active filters
   const filteredDecks = decks.filter(deck => {
@@ -374,8 +434,8 @@ const Decks = () => {
             onChange={handleFilterChange}
           >
             <option value=''>All Decks</option>
-            <option value='false'>IRL</option>
-            <option value='true'>Online Only</option>
+            <option value='true'>IRL</option>
+            <option value='false'>Online Only</option>
           </select>
         </div>
 
@@ -423,6 +483,7 @@ const Decks = () => {
                   <th onClick={() => handleSort('onlineOnly')} style={{cursor: 'pointer'}}>
                     IRL {getSortArrow('onlineOnly')}
                   </th>
+                  <th>Power Voting</th>
                   <th>Decklist Link</th>
                   <th>Notes</th>
                   <th>Actions</th>
@@ -437,23 +498,45 @@ const Decks = () => {
                     <td className='power-level'>{deck.powerLevel}</td>
                     <td>{deck.onlineOnly ?  '✓' : '✗'}</td>
                     <td>
+                      <div className='votes-summary'>
+                        <span
+                          role='button'
+                          tabIndex={0}
+                          className={`vote-chip up ${hasUpvoted(deck) ? 'active' : ''} ${!canUpvote(deck) ? 'disabled' : ''}`}
+                          onClick={() => canUpvote(deck) && handleVote(deck, 'up')}
+                          onKeyPress={(event) => event.key === 'Enter' && canUpvote(deck) && handleVote(deck, 'up')}
+                          title={canUpvote(deck) ? (hasUpvoted(deck) ? 'Remove upvote' : 'Upvote this deck') : 'Cannot upvote a level 11 deck'}
+                        >
+                          {getUpvoteCount(deck)}↑
+                        </span>
+                        <span
+                          role='button'
+                          tabIndex={0}
+                          className={`vote-chip down ${hasDownvoted(deck) ? 'active' : ''} ${!canDownvote(deck) ? 'disabled' : ''}`}
+                          onClick={() => canDownvote(deck) && handleVote(deck, 'down')}
+                          onKeyPress={(event) => event.key === 'Enter' && canDownvote(deck) && handleVote(deck, 'down')}
+                          title={canDownvote(deck) ? (hasDownvoted(deck) ? 'Remove downvote' : 'Downvote this deck') : 'Cannot downvote a level 1 deck'}
+                        >
+                          {getDownvoteCount(deck)}↓
+                        </span>
+                      </div>
+                    </td>
+                    <td>
                       <a href={deck.decklistLink} target='_blank' rel='noopener noreferrer'>
                         View Deck
                       </a>
                     </td>
                     <td>{deck.notes || '-'}</td>
-                    <td className='deck-actions'>
-                      {isDeckOwner(deck) ? (
-                        <>
+                    <td>
+                      {isDeckOwner(deck) && (
+                        <div className='deck-actions'>
                           <button type='button' className='action-btn' onClick={() => navigate('/account')}>
                             Manage
                           </button>
                           <button type='button' className='action-btn delete-btn' onClick={() => handleDeleteDeck(deck.id)}>
                             Delete
                           </button>
-                        </>
-                      ) : (
-                        '-'
+                        </div>
                       )}
                     </td>
                   </tr>
