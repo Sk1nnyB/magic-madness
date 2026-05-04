@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { RandomEffectButton } from './Button';
-import '../App.css';
+import { RandomEffectButton } from '../common/Button';
+import '../../App.css';
 import './RandomEffectSection.css';
-import effects from '../data/effects.js';
-import effectsimg from '../images/effects/no-effect-card.jpg'
+import effects from '../../data/effects.js';
+import effectsimg from '../../assets/images/effects/no-effect-card.jpg'
 
 var last_nums = [];
 

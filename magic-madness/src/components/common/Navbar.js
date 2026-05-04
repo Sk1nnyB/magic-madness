@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { signOut } from 'firebase/auth';
-import { auth } from '../firebase';
-import { useAuth } from '../AuthContext';
+import { auth } from '../../utils/firebase';
+import { useAuth } from '../../AuthContext';
 import './Navbar.css';
 
 function Navbar() {

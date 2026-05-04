@@ -1,6 +1,6 @@
 import React from 'react';
-import '../App.css';
-import { DecksButton, RandomEffectButton } from './Button';
+import '../../App.css';
+import { DecksButton, RandomEffectButton } from '../common/Button';
 import './HeroSection.css';
 import Typical from 'react-typical'
 

@@ -1,8 +1,8 @@
 import React from 'react';
 import './Cards.css';
 import CardItem from './CardItem';
-import decksimg from '../images/decks.jpg'
-import effectsimg from '../images/randomeffects.jpg'
+import decksimg from '../assets/images/decks.jpg'
+import effectsimg from '../assets/images/randomeffects.jpg'
 
 function Cards() {
   return (

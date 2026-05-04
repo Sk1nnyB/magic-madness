@@ -17,7 +17,7 @@
 }
 
 .decks {
-  background-image: url('../src/images/decks.jpg');
+  background-image: url('../src/assets/images/decks.jpg');
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
@@ -26,7 +26,7 @@
 }
 
 .mafia {
-  background-image: url('../src/images/mafia.jpg');
+  background-image: url('../src/assets/images/mafia.jpg');
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { collection, getDocs, doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { updateProfile } from 'firebase/auth';
-import { auth, db } from '../../firebase';
+import { auth, db } from '../../utils/firebase';
 import { useAuth } from '../../AuthContext';
 import './Decks.css';
 
@@ -260,8 +260,8 @@ function Account() {
                   <input
                     id='edit-commander'
                     name='commander'
-                    value={editDeckData.commander ?? ''}
-                    onChange={(e) => setEditDeckData(prev => ({ ...prev, commander: e.target.value }))}
+                    value={editDeckData.commander || ''}
+                    onChange={(e) => handleEditChange('commander', e.target.value)}
                   />
                 </div>
                 <div className='form-group'>
@@ -269,8 +269,8 @@ function Account() {
                   <input
                     id='edit-archetype'
                     name='archetype'
-                    value={editDeckData.archetype ?? ''}
-                    onChange={(e) => setEditDeckData(prev => ({ ...prev, archetype: e.target.value }))}
+                    value={editDeckData.archetype || ''}
+                    onChange={(e) => handleEditChange('archetype', e.target.value)}
                   />
                 </div>
                 <div className='form-group'>
@@ -278,8 +278,8 @@ function Account() {
                   <input
                     id='edit-decklistLink'
                     name='decklistLink'
-                    value={editDeckData.decklistLink ?? ''}
-                    onChange={(e) => setEditDeckData(prev => ({ ...prev, decklistLink: e.target.value }))}
+                    value={editDeckData.decklistLink || ''}
+                    onChange={(e) => handleEditChange('decklistLink', e.target.value)}
                   />
                 </div>
                 <div className='form-group'>
@@ -288,7 +288,10 @@ function Account() {
                     id='edit-powerLevel'
                     name='powerLevel'
                     value={editDeckData.powerLevel ?? 5}
-                    onChange={(e) => setEditDeckData(prev => ({ ...prev, powerLevel: parseInt(e.target.value, 10) }))}
+                    onChange={(e) => {
+                      const val = parseInt(e.target.value, 10);
+                      handleEditChange('powerLevel', val);
+                    }}
                   >
                     {[11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1].map(level => (
                       <option key={level} value={level}>{level}</option>
@@ -301,7 +304,7 @@ function Account() {
                       id='edit-onlineOnly'
                       type='checkbox'
                       checked={editDeckData.onlineOnly ?? false}
-                      onChange={(e) => setEditDeckData(prev => ({ ...prev, onlineOnly: e.target.checked }))}
+                      onChange={(e) => handleEditChange('onlineOnly', e.target.checked)}
                     />
                     IRL
                   </label>
@@ -311,8 +314,8 @@ function Account() {
                   <textarea
                     id='edit-notes'
                     name='notes'
-                    value={editDeckData.notes ?? ''}
-                    onChange={(e) => setEditDeckData(prev => ({ ...prev, notes: e.target.value }))}
+                    value={editDeckData.notes || ''}
+                    onChange={(e) => handleEditChange('notes', e.target.value)}
                     rows='4'
                   />
                 </div>

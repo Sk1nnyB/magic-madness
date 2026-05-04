@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { getDoc, doc } from 'firebase/firestore';
-import { auth, db } from '../../firebase';
+import { auth, db } from '../../utils/firebase';
 import './Login.css';
 
 const USERNAME_REGEX = /^[a-zA-Z0-9._-]{3,30}$/;
