@@ -20,7 +20,7 @@ export const MafiaButton = ({
   const checkButtonSize = SIZES.includes(buttonSize) ? buttonSize : SIZES[0];
 
   return (
-    <Link to='/magic-madness/mafia' className='btn-mobile'>
+    <Link to='/login' className='btn-mobile'>
       <button
         className={`btn ${checkButtonStyle} ${checkButtonSize}`}
         onClick={onClick}
@@ -46,7 +46,7 @@ export const DecksButton = ({
   const checkButtonSize = SIZES.includes(buttonSize) ? buttonSize : SIZES[0];
 
   return (
-    <Link to='/magic-madness/decks' className='btn-mobile'>
+    <Link to='/decks' className='btn-mobile'>
       <button
         className={`btn ${checkButtonStyle} ${checkButtonSize}`}
         onClick={onClick}
@@ -72,7 +72,7 @@ export const RandomEffectButton = ({
   const checkButtonSize = SIZES.includes(buttonSize) ? buttonSize : SIZES[0];
 
   return (
-    <Link to='/magic-madness/random-effect' className='btn-mobile'>
+    <Link to='/random-effect' className='btn-mobile'>
       <button
         className={`btn ${checkButtonStyle} ${checkButtonSize}`}
         onClick={onClick}

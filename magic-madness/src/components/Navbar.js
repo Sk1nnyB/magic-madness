@@ -1,19 +1,34 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { signOut } from 'firebase/auth';
+import { auth } from '../firebase';
+import { useAuth } from '../AuthContext';
 import './Navbar.css';
 
 function Navbar() {
   const [click, setClick] = useState(false);
+  const { user, profile } = useAuth();
+  const accountLabel = user
+    ? profile?.username || profile?.nickname || user.email || 'Account'
+    : 'Log In';
 
   const handleClick = () => setClick(!click);
   const closeMobileMenu = () => setClick(false);
 
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      closeMobileMenu();
+    } catch (error) {
+      console.error('Error signing out:', error);
+    }
+  };
 
   return (
     <>
       <nav className='navbar'>
         <div className='navbar-container'>
-          <Link to='/magic-madness' className='navbar-logo' onClick={closeMobileMenu}>
+          <Link to='/' className='navbar-logo' onClick={closeMobileMenu}>
             MGC MDNS
           </Link>
           <div className='menu-icon' onClick={handleClick}>
@@ -22,7 +37,7 @@ function Navbar() {
           <ul className={click ? 'nav-menu active' : 'nav-menu'}>
             <li className='nav-item'>
               <Link
-                to='/magic-madness'
+                to='/'
                 className='nav-links'
                 onClick={closeMobileMenu}>
                 Home
@@ -30,7 +45,7 @@ function Navbar() {
             </li>
             <li className='nav-item'>
               <Link
-                to='/magic-madness/decks'
+                to='/decks'
                 className='nav-links'
                 onClick={closeMobileMenu}
               >
@@ -39,7 +54,7 @@ function Navbar() {
             </li>
             <li className='nav-item'>
               <Link
-                to='/magic-madness/random-effect'
+                to='/random-effect'
                 className='nav-links'
                 onClick={closeMobileMenu}
               >
@@ -48,13 +63,23 @@ function Navbar() {
             </li>
             <li className='nav-item'>
               <Link
-                to='/magic-madness/mafia'
+                to={user ? '/account' : '/login'}
                 className='nav-links'
                 onClick={closeMobileMenu}
               >
-                Mafia
+                {accountLabel}
               </Link>
             </li>
+            {user && (
+              <li className='nav-item'>
+                <button
+                  className='nav-links logout-btn'
+                  onClick={handleLogout}
+                >
+                  Logout
+                </button>
+              </li>
+            )}
           </ul>
         </div>
       </nav>

@@ -1,5 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
+import { getAuth } from 'firebase/auth';
 
 // TODO: Replace with your Firebase config
 // Get this from Firebase Console: https://console.firebase.google.com/
@@ -12,10 +13,27 @@ const firebaseConfig = {
   appId: process.env.REACT_APP_FIREBASE_APP_ID,
 };
 
+// Validate config early so missing env vars are visible
+const requiredFirebaseOptions = [
+  'apiKey',
+  'authDomain',
+  'projectId',
+  'storageBucket',
+  'messagingSenderId',
+  'appId',
+];
+const missingOptions = requiredFirebaseOptions.filter((key) => !firebaseConfig[key]);
+if (missingOptions.length > 0) {
+  console.error('Missing Firebase configuration values:', missingOptions.join(', '));
+}
+
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
 // Initialize Firestore
 export const db = getFirestore(app);
+
+// Initialize Firebase Auth
+export const auth = getAuth(app);
 
 export default app;

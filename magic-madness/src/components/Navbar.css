@@ -36,7 +36,7 @@
 
 .nav-menu {
   display: grid;
-  grid-template-columns: repeat(4, auto);
+  grid-template-columns: repeat(5, auto);
   grid-gap: 10px;
   list-style: none;
   text-align: center;
@@ -63,12 +63,21 @@
   transition: all 0.2s ease-out;
 }
 
-.fa-bars {
+.logout-btn {
+  background: none;
+  border: none;
   color: #fff;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  height: 100%;
+  cursor: pointer;
 }
 
-.nav-links-mobile {
-  display: none;
+.logout-btn:hover {
+  border-bottom: 4px solid #fff;
+  transition: all 0.2s ease-out;
 }
 
 .menu-icon {

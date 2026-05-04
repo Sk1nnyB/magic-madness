@@ -12,16 +12,16 @@ function Cards() {
         <div className='cards__wrapper'>
           <ul className='cards__items'>
             <CardItem
-              src= { decksimg }
+              src={decksimg}
               text="Don't know what to play? Pick a random deck."
               label='Decks'
-              path='/magic-madness/decks'
+              path='/decks'
             />
             <CardItem
-              src= { effectsimg }
+              src={effectsimg}
               text='Feeling lucky? Generate random effects.'
               label='Random Effects'
-              path='/magic-madness/random-effect'
+              path='/random-effect'
             />
           </ul>
         </div>
