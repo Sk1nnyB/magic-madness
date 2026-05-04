@@ -22,11 +22,12 @@ const Decks = () => {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
   const [formOpen, setFormOpen] = useState(false);
+  const [activeHandle, setActiveHandle] = useState('min');
 
   // Filters
   const [filters, setFilters] = useState({
     owner: '',
-    powerLevel: '',
+    powerLevel: { min: 1, max: 11 },
     onlineOnly: '',
     archetype: '',
     commander: ''
@@ -140,9 +141,10 @@ const Decks = () => {
 
   // Filter decks based on active filters
   const filteredDecks = decks.filter(deck => {
+    const dPL = parseInt(deck.powerLevel);
     return (
       (!filters.owner || (deck.owner && deck.owner.toLowerCase().includes(filters.owner.toLowerCase()))) &&
-      (!filters.powerLevel || deck.powerLevel.toString() === filters.powerLevel) &&
+      (dPL >= filters.powerLevel.min && dPL <= filters.powerLevel.max) &&
       (filters.onlineOnly === '' || (filters.onlineOnly === 'true' ? deck.onlineOnly : !deck.onlineOnly)) &&
       (!filters.archetype || (deck.archetype && deck.archetype.toLowerCase().includes(filters.archetype.toLowerCase()))) &&
       (!filters.commander || (deck.commander && deck.commander.toLowerCase().includes(filters.commander.toLowerCase())))
@@ -326,51 +328,73 @@ const Decks = () => {
             </select>
           </div>
 
-          <div className='filter-group'>
-            <label htmlFor='filter-powerLevel'>Power Level</label>
-            <select
-              id='filter-powerLevel'
-              name='powerLevel'
-              value={filters.powerLevel}
-              onChange={handleFilterChange}
-            >
-              <option value=''>All Power Levels</option>
-              {[...uniquePowerLevels].sort((a, b) => b - a).map(level => (
-                <option key={level} value={level}>{level}</option>
-              ))}
-            </select>
-          </div>
+        <div className='filter-group'>
+          <label>Power Level Band: <strong>{filters.powerLevel.min === filters.powerLevel.max ? filters.powerLevel.min : `${filters.powerLevel.min} - ${filters.powerLevel.max}`}</strong></label>
 
-          <div className='filter-group'>
-            <label htmlFor='filter-onlineOnly'>IRL</label>
-            <select
-              id='filter-onlineOnly'
-              name='onlineOnly'
-              value={filters.onlineOnly}
-              onChange={handleFilterChange}
-            >
-              <option value=''>All Decks</option>
-              <option value='false'>IRL</option>
-              <option value='true'>Online Only</option>
-            </select>
-          </div>
-
-          <div className='filter-group'>
-            <label htmlFor='filter-archetype'>Archetype</label>
-            <select
-              id='filter-archetype'
-              name='archetype'
-              value={filters.archetype}
-              onChange={handleFilterChange}
-            >
-              <option value=''>All Archetypes</option>
-              {uniqueArchetypes.map(archetype => (
-                <option key={archetype} value={archetype}>{archetype}</option>
-              ))}
-            </select>
+          <div className='dual-range-slider'>
+            <input
+              type='range'
+              min='1'
+              max='11'
+              value={filters.powerLevel.min}
+              onMouseDown={() => setActiveHandle('min')}
+              onChange={(e) => {
+                const val = parseInt(e.target.value);
+                setFilters(prev => ({
+                  ...prev,
+                  powerLevel: { ...prev.powerLevel, min: Math.min(val, prev.powerLevel.max) }
+                }));
+              }}
+              className={`range-input min-input ${activeHandle === 'min' ? 'active' : ''}`}
+            />
+            <input
+              type='range'
+              min='1'
+              max='11'
+              value={filters.powerLevel.max}
+              onMouseDown={() => setActiveHandle('max')}
+              onChange={(e) => {
+                const val = parseInt(e.target.value);
+                setFilters(prev => ({
+                  ...prev,
+                  powerLevel: { ...prev.powerLevel, max: Math.max(val, prev.powerLevel.min) }
+                }));
+              }}
+              className={`range-input max-input ${activeHandle === 'max' ? 'active' : ''}`}
+            />
           </div>
         </div>
+
+        <div className='filter-group'>
+          <label htmlFor='filter-onlineOnly'>IRL</label>
+          <select
+            id='filter-onlineOnly'
+            name='onlineOnly'
+            value={filters.onlineOnly}
+            onChange={handleFilterChange}
+          >
+            <option value=''>All Decks</option>
+            <option value='false'>IRL</option>
+            <option value='true'>Online Only</option>
+          </select>
+        </div>
+
+        <div className='filter-group'>
+          <label htmlFor='filter-archetype'>Archetype</label>
+          <select
+            id='filter-archetype'
+            name='archetype'
+            value={filters.archetype}
+            onChange={handleFilterChange}
+          >
+            <option value=''>All Archetypes</option>
+            {uniqueArchetypes.map(archetype => (
+              <option key={archetype} value={archetype}>{archetype}</option>
+            ))}
+          </select>
+        </div>
       </div>
+    </div>
 
       {/* Decks Table */}
       <div className='table-section'>
