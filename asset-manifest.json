@@ -1,7 +1,8 @@
 {
   "files": {
-    "main.css": "/magic-madness/static/css/main.1011d183.css",
-    "main.js": "/magic-madness/static/js/main.a31ffbdf.js",
+    "main.css": "/magic-madness/static/css/main.f2a21d08.css",
+    "main.js": "/magic-madness/static/js/main.62cb9507.js",
+    "static/media/account.jpg": "/magic-madness/static/media/account.1986f8dfe30cbd15b26f.jpg",
     "static/media/decks.jpg": "/magic-madness/static/media/decks.c5ff7f857792bc8284ed.jpg",
     "static/media/meteorite.jpg": "/magic-madness/static/media/meteorite.29b2e162c78583dc8b89.jpg",
     "static/media/toy-boat.jpg": "/magic-madness/static/media/toy-boat.12129626c701b9567152.jpg",
@@ -53,11 +54,11 @@
     "static/media/mafia.jpg": "/magic-madness/static/media/mafia.5511246c136bf210e829.jpg",
     "static/media/no-effect-card.jpg": "/magic-madness/static/media/no-effect-card.dea33939559ac0275fb7.jpg",
     "index.html": "/magic-madness/index.html",
-    "main.1011d183.css.map": "/magic-madness/static/css/main.1011d183.css.map",
-    "main.a31ffbdf.js.map": "/magic-madness/static/js/main.a31ffbdf.js.map"
+    "main.f2a21d08.css.map": "/magic-madness/static/css/main.f2a21d08.css.map",
+    "main.62cb9507.js.map": "/magic-madness/static/js/main.62cb9507.js.map"
   },
   "entrypoints": [
-    "static/css/main.1011d183.css",
-    "static/js/main.a31ffbdf.js"
+    "static/css/main.f2a21d08.css",
+    "static/js/main.62cb9507.js"
   ]
 }
