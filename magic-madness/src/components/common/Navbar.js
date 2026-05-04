@@ -9,7 +9,7 @@ function Navbar() {
   const [click, setClick] = useState(false);
   const { user, profile } = useAuth();
   const accountLabel = user
-    ? profile?.username || profile?.nickname || user.email || 'Account'
+    ? profile?.nickname || profile?.username || 'Account'
     : 'Log In';
 
   const handleClick = () => setClick(!click);

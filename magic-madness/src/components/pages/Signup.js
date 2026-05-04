@@ -113,7 +113,6 @@ function Signup() {
     <div className='login-page'>
       <div className='login-container'>
         <h2>Sign Up</h2>
-        <p>Create a username-based account using Firebase Authentication.</p>
         {error && <div className='login-error'>{error}</div>}
         {message && <div className='login-success'>{message}</div>}
         <form className='login-form' onSubmit={handleSubmit}>

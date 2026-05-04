@@ -173,9 +173,9 @@ function Account() {
     );
   }
 
-  const nickname = profile?.nickname ?? profile?.username ?? user.email ?? 'Player';
+  const nickname = profile?.nickname ?? profile?.username ?? 'Player';
   const memberSince = profile?.createdAt?.seconds ? new Date(profile.createdAt.seconds * 1000) : profile?.createdAt ? new Date(profile.createdAt) : null;
-  const subtitle = profile?.username ? `@${profile.username}` : user.email;
+  const subtitle = `@${profile?.username || 'unknown'}`;
 
   return (
     <div className='decks-container account-page'>
@@ -209,7 +209,6 @@ function Account() {
                 {isEditingProfile ? 'Cancel Edit' : 'Edit Profile'}
               </button>
             </div>
-            <p>{user.email}</p>
             {memberSince && <p>Member since {memberSince.toLocaleDateString()}</p>}
           </div>
         </div>
